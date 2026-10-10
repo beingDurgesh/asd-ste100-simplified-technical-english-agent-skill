@@ -1,0 +1,19 @@
+{
+  "name": "ste100",
+  "description": "Write or rewrite text in ASD-STE100 Simplified Technical English: short sentences, active voice, simple tenses, one word one meaning, condition before command, every technical term defined at first use, no AI slop. Default mode is Plain (structural rules only). Strict mode applies full STE vocabulary compliance when the user names STE, ASD-STE100, or compliance.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "compatibility": "claude-code cursor codex gemini-cli opencode",
+  "metadata": {
+    "standard": "ASD-STE100 Issue 9 (2025-01-15)"
+  },
+  "skills": [
+    {
+      "name": "ste100",
+      "path": "skills/ste100",
+      "description": "ASD-STE100 Simplified Technical English writing and checking skill."
+    }
+  ],
+  "hooks": [],
+  "mcpServers": []
+}

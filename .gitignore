@@ -1,0 +1,10 @@
+# Generated dictionary files (make from your own PDF)
+tools/ste-dictionary/dict.json
+tools/ste-dictionary/approved.txt
+tools/ste-dictionary/not-approved.tsv
+approved.txt
+dict.json
+not-approved.tsv
+__pycache__/
+*.pyc
+.pytest_cache/
