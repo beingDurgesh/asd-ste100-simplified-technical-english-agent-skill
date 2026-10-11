@@ -1,0 +1,24 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "skill": {
+      "*": "allow"
+    }
+  },
+  "agent": {
+    "build": {
+      "permission": {
+        "skill": {
+          "ste100": "allow"
+        }
+      }
+    },
+    "plan": {
+      "permission": {
+        "skill": {
+          "ste100": "allow"
+        }
+      }
+    }
+  }
+}
