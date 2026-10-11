@@ -1,4 +1,4 @@
-# asd-ste100-skill
+# ASD-STE100-skill
 
 An [Agent Skills](https://github.com/agentskills/agentskills) package that makes
 your AI agent write and rewrite text in **ASD-STE100 Simplified Technical
