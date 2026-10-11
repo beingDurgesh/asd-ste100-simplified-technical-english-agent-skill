@@ -1,23 +1,24 @@
 ---
 name: ste100
 description: |
-  Write or rewrite text in ASD-STE100 Simplified Technical English: short
-  sentences, active voice, simple tenses, one word one meaning, condition
-  before command, every technical term defined at first use, no AI slop.
-  Default mode is Plain (structural rules only). Strict mode applies full
-  STE vocabulary compliance when the user names STE, ASD-STE100, or
-  compliance. Use for documentation, READMEs, runbooks, procedures, error
-  messages, release notes, incident reports, API guides, agent prompts, UI
-  copy, and explanations for readers outside the field. Also use when the
-  user says "STE", "Simplified Technical English", "plain English", "layman
-  terms", "explain it simply", "no jargon", "de-slop", "make this readable",
-  "write for non-native readers", "disambiguate this", "rewrite so an agent
-  cannot misread this", or "controlled-language rewrite". The same rules
-  govern the reply: answer first, prose only.
+  Apply ASD-STE100 Simplified Technical English to ALL writing: docs,
+  READMEs, runbooks, error messages, release notes, commit messages, agent
+  prompts, UI copy, and chat replies. Short sentences, active voice, simple
+  tenses, one word per meaning, condition before command, every technical
+  term defined at first use, no AI slop. Default mode is Plain (structural
+  rules only). Strict mode applies full STE vocabulary compliance when the
+  user names STE, ASD-STE100, or compliance. Use for any text the user
+  writes or asks you to write. Also trigger on: "STE", "Simplified
+  Technical English", "plain English", "layman terms", "explain it
+  simply", "no jargon", "de-slop", "make this readable", "write for
+  non-native readers", "disambiguate this", "controlled-language rewrite".
+  Load this skill proactively whenever the user asks you to write or
+  rewrite anything.
 compatibility: claude-code cursor codex gemini-cli opencode antigravity
 metadata:
   version: "1.0.0"
   standard: ASD-STE100 Issue 9 (2025-01-15)
+  opencode/slash: "true"
 ---
 
 # ASD-STE100 Simplified Technical English
