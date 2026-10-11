@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.3 — 2026-10-11
+
+- Added `opencode/slash: "true"` metadata to `SKILL.md`, exposing the skill
+  as a `/ste100` slash command in OpenCode.
+- Added `opencode.json` with skill permissions allowing `ste100` for the
+  build and plan agents.
+- Rewrote the `description` field to be more prominent and action-oriented
+  ("Apply ASD-STE100 to ALL writing", "Load this skill proactively"), so
+  OpenCode auto-selection is more likely to pick it up for writing tasks.
+- Updated `AGENTS.md` with the `/ste100` slash command note.
+
 ## 1.0.2 — 2026-10-11
 
 - Added `--dict` to `ste-lint.py`. When `tools/ste-dictionary/not-approved.tsv`
