@@ -27,7 +27,7 @@
     "capabilities": [
       "Write"
     ],
-    "websiteURL": "https://github.com/danyuchn/asd-ste100-skill",
+    "websiteURL": "https://github.com/imakeshit/ASD-STE100-for-CS",
     "defaultPrompt": [
       "Rewrite this technical text in ASD-STE100 Simplified Technical English.",
       "Write this procedure with STE rules.",
