@@ -38,7 +38,7 @@ Run the shipped linter to check text:
 ```
 python3 skills/ste100/scripts/ste-lint.py --selftest
 python3 skills/ste100/scripts/ste-lint.py path/to/file.md
-python3 evals/ste_lint.py examples --baseline 5
+python3 skills/ste100/evals/ste_lint.py examples --baseline 5
 ```
 
 ## Dictionary toolchain
