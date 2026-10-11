@@ -6,6 +6,9 @@ English** — the controlled language behind aerospace maintenance manuals.
 
 ## What it does
 
+<img width="1024" height="768" alt="ASD-STE100 agent skill social preview 1" src="https://github.com/user-attachments/assets/5ce2f8e9-b80a-4a72-bc91-f049f7d2ea87" />
+
+
 Two registers, both short:
 
 - **Document mode (Plain)** — structural rules only. Short sentences, active
