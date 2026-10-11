@@ -20,6 +20,8 @@ Load it when the user asks to:
   "de-slop", "make this readable", "write for non-native readers",
   "disambiguate this", "controlled-language rewrite"
 
+In OpenCode, the skill is also available as a slash command: `/ste100`.
+
 ## Default mode
 
 Plain (structural rules only). The skill itself explains the difference
