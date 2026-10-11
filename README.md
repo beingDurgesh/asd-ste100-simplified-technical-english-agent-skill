@@ -18,7 +18,16 @@ The same rules govern the reply the agent types in chat.
 
 ## Installation
 
-### As a plugin (recommended)
+### Quick install (recommended)
+
+```
+npx skills add beingDurgesh/asd-ste100-simplified-technical-english-agent-skill
+```
+
+This pulls the skill from the GitHub repo and installs it for the current
+project. Update later with `npx skills update`.
+
+### As a plugin
 
 Loads the rules automatically on every session start. No need to name the skill.
 
