@@ -1,11 +1,35 @@
 # Changelog
 
+## 1.0.2 — 2026-10-11
+
+- Added `--dict` to `ste-lint.py`. When `tools/ste-dictionary/not-approved.tsv`
+  is present, the linter reports every word the standard does not approve,
+  with the approved alternatives. The flag is opt-in: the structural rules
+  work without it, and it is a no-op when the word list is absent.
+- Added an output style at `output-styles/simple-english.md` and registered it
+  in `.claude-plugin/plugin.json`. It makes the agent reply in STE register
+  without naming the skill.
+- Rewrote the output style to use the same rule set as `SKILL.md` instead of
+  its own copy, so the two cannot drift.
+- Added Before/after examples, a Why STE100 section, and an FAQ to
+  `README.md`.
+- Fixed the `--fix` marketing-adjective rule, which previously left `****`
+  garbage behind when an adjective was wrapped in bold.
+- Restored the `LICENSE` file and all license references.
+
 ## 1.0.1 — 2026-10-11
 
+- Restored agent integration files (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`,
+  `.cursor/rules/ste100.mdc`, `.github/copilot-instructions.md`), plugin
+  manifests (`.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`,
+  `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`),
+  hooks (`skills/ste100/hooks/`), prompts (`skills/ste100/prompts/`),
+  evals (`skills/ste100/evals/`), slop word list, tests, and output styles.
 - Added Antigravity CLI to the `compatibility` field in `SKILL.md`.
 - Added `npx skills add` quick-install instructions to `README.md`.
 - Fixed stale `evals/` paths in `.cursor/rules/ste100.mdc` and
   `.github/copilot-instructions.md` after the reorganization.
+- Removed `examples/` directory (not referenced by any install path).
 
 ## 1.0.0 — 2026-10-10
 

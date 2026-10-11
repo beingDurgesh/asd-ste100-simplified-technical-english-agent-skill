@@ -11,6 +11,8 @@ Usage:
     ste-lint.py --baseline 5 FILE      # pass unless hard violations exceed 5
     ste-lint.py --disable passive-voice,present-perfect FILE
     ste-lint.py --selftest
+    ste-lint.py --dict FILE             # also flag non-approved words, if
+                                        # not-approved.tsv is present
 
 Exit 1 when hard ("advisory-free") violations exceed the baseline (default 0).
 Advisory findings (passive voice, compound tenses) never fail the run.
@@ -18,6 +20,7 @@ Advisory findings (passive voice, compound tenses) never fail the run.
 import json
 import re
 import sys
+from pathlib import Path
 
 # ponytail: regex heuristics, not a parser. No noun-cluster rule — needs POS
 # tagging to avoid constant false positives; add spaCy-backed rule if ever needed.
@@ -43,6 +46,103 @@ NOUN_CLUSTER_BREAKERS = {
 }
 
 NOUN_CLUSTER_MIN = 4  # consecutive content words that flag a noun cluster
+
+# --- Optional dictionary-backed vocabulary check ---------------------------
+# Loaded lazily and only when --dict is passed. The standard's approved and
+# not-approved lists are copyrighted by ASD; this linter ships no dictionary
+# content. Users build not-approved.tsv from their own free PDF copy with
+# tools/ste-dictionary/emit.py. When the file is absent, --dict is a no-op.
+DICT_CANDIDATES = [
+    Path("tools/ste-dictionary/not-approved.tsv"),
+    Path("not-approved.tsv"),
+    Path(__file__).resolve().parent.parent.parent
+    / "tools" / "ste-dictionary" / "not-approved.tsv",
+]
+_DICT = None
+_DICT_PATH = None
+
+# Simple inflection rules applied before lookup. Same set as
+# tools/ste-dictionary/ste_dict_lint.py so the two tools agree.
+_DICT_INFLECTIONS = [
+    (re.compile(r"ies$"), "y"),
+    (re.compile(r"es$"), ""),
+    (re.compile(r"ied$"), "y"),
+    (re.compile(r"ing$"), ""),
+    (re.compile(r"ed$"), ""),
+    (re.compile(r"ness$"), ""),
+    (re.compile(r"ment$"), ""),
+    (re.compile(r"ly$"), ""),
+    (re.compile(r"er$"), ""),
+    (re.compile(r"est$"), ""),
+    (re.compile(r"s$"), ""),
+]
+
+
+def _load_dict():
+    """Return (words, path). words maps base form -> alternatives string."""
+    global _DICT, _DICT_PATH
+    if _DICT is not None:
+        return _DICT, _DICT_PATH
+    for cand in DICT_CANDIDATES:
+        if cand.is_file():
+            words = {}
+            with open(cand, encoding="utf-8") as fh:
+                next(fh, None)  # header
+                for line in fh:
+                    parts = line.rstrip("\n").split("\t")
+                    if len(parts) >= 2:
+                        words[parts[0].lower()] = parts[1]
+            _DICT = words
+            _DICT_PATH = cand
+            return words, cand
+    _DICT = {}
+    _DICT_PATH = None
+    return _DICT, None
+
+
+def _dict_base_form(word):
+    """Return the dictionary headword for word, or None if approved."""
+    words, _ = _load_dict()
+    if not words:
+        return None
+    lower = word.lower()
+    if lower in words:
+        return lower
+    for pat, repl in _DICT_INFLECTIONS:
+        if not pat.search(lower):
+            continue
+        cand = pat.sub(repl, lower)
+        if cand in words:
+            return cand
+        if pat.pattern == r"ed$" and cand + "e" in words:
+            return cand + "e"
+    return None
+
+
+def _dict_findings(text, filename):
+    """Report each non-approved word once, with its line and column."""
+    words, path = _load_dict()
+    if not words:
+        return [], path
+    findings = []
+    seen = set()
+    for m in re.finditer(r"[A-Za-z][A-Za-z\-']*", text):
+        base = _dict_base_form(m.group(0))
+        if base and base not in seen:
+            seen.add(base)
+            lineno = text.count("\n", 0, m.start()) + 1
+            col = m.start() - text.rfind("\n", 0, m.start())
+            findings.append({
+                "file": filename, "line": lineno, "col": col,
+                "rule": "not-approved-word", "level": "advisory-free",
+                "match": m.group(0),
+                "message": (
+                    f"{m.group(0)} is not in the approved dictionary. "
+                    f"Use {words[base] or 'the approved alternative'}."
+                ),
+            })
+    findings.sort(key=lambda f: (f["line"], f["col"]))
+    return findings, path
 
 def _find_noun_clusters(line, source_column, lineno, filename, findings):
     """Detect runs of 4+ consecutive lowercase content words (Rule 2.1).
@@ -497,6 +597,14 @@ def selftest():
         f["rule"] == "noun-cluster" for f in lint(normal_text)
     ))
 
+    # --dict is opt-in: the structural linter never checks vocabulary.
+    check("structural lint ignores vocabulary", lint("utilize the lever") == [])
+    if _DICT_PATH:
+        hits, _ = _dict_findings("utilize the lever", "<test>")
+        check("dict flags a non-approved word", any(f["rule"] == "not-approved-word" for f in hits))
+        clean, _ = _dict_findings("use the lever", "<test>")
+        check("dict is silent on approved words", clean == [])
+
     if failures:
         for name in failures:
             print("SELFTEST FAIL: " + name, file=sys.stderr)
@@ -511,6 +619,7 @@ def main(argv):
     fix = False
     dry_run = False
     terse = False
+    use_dict = False
     files = []
     i = 0
     while i < len(args):
@@ -529,6 +638,8 @@ def main(argv):
             dry_run = True; i += 1; continue
         if a == "--terse":
             terse = True; i += 1; continue
+        if a == "--dict":
+            use_dict = True; i += 1; continue
         if a.startswith("-"):
             print(f"unknown flag: {a}", file=sys.stderr); return 2
         files.append(a); i += 1
@@ -536,6 +647,12 @@ def main(argv):
     if not files:
         text = sys.stdin.read()
         findings = [f for f in lint(text, terse=terse) if f["rule"] not in disable]
+        if use_dict:
+            dict_findings, dict_path = _dict_findings(text, "<stdin>")
+            if dict_path:
+                findings.extend(dict_findings)
+            else:
+                print("--dict: no not-approved.tsv found; vocabulary check skipped")
         hard = [f for f in findings if f["level"] == "advisory-free"]
         report(findings, _count_words(text), as_json, len(hard), baseline)
         return 1 if len(hard) > baseline else 0
@@ -553,6 +670,12 @@ def main(argv):
         for f in lint(text, filename=path, terse=terse):
             if f["rule"] not in disable:
                 all_findings.append(f)
+        if use_dict:
+            dict_findings, dict_path = _dict_findings(text, path)
+            if dict_path:
+                all_findings.extend(dict_findings)
+            else:
+                print(f"--dict: no not-approved.tsv found; vocabulary check skipped for {path}")
     hard = [f for f in all_findings if f["level"] == "advisory-free"]
     if dry_run:
         for filename, fixes in fix_files(files, dry_run=True):

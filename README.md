@@ -123,6 +123,7 @@ the agent picks it up without a skills directory:
 | `.cursor/rules/ste100.mdc` | Cursor rules |
 | `.github/copilot-instructions.md` | GitHub Copilot |
 | `.claude-plugin/plugin.json` | Claude Code plugin manifest |
+| `output-styles/simple-english.md` | Claude Code output style |
 | `skills/ste100/hooks/` | SessionStart, PostToolUse, and Stop hooks |
 | `skills/ste100/prompts/system-prompt.md` | Compact rule block for the hook payload |
 | `skills/ste100/slop.tsv` | LLM-tell words counted by the dictionary linter |
@@ -154,6 +155,7 @@ skills/ste100/
 ```
 python3 skills/ste100/scripts/ste-lint.py README.md
 python3 skills/ste100/scripts/ste-lint.py --selftest
+python3 skills/ste100/scripts/ste-lint.py --dict README.md
 echo "text" | python3 skills/ste100/scripts/ste-lint.py --json
 python3 skills/ste100/scripts/ste-lint.py --baseline 5 doc.md
 python3 skills/ste100/scripts/ste-lint.py --disable passive-voice,present-perfect doc.md
@@ -163,6 +165,12 @@ python3 skills/ste100/scripts/ste-lint.py --terse doc.md
 
 Exit 1 when hard (`advisory-free`) violations exceed the baseline (default 0).
 Advisory findings (passive voice, compound tenses) never fail the run.
+
+`--dict` adds the vocabulary check. It reads `tools/ste-dictionary/not-approved.tsv`
+and reports every word the standard does not approve, with the approved
+alternatives. It is opt-in: the structural rules work without it. If the word
+list is absent, `--dict` says so and checks nothing. Build the list from your
+own free PDF copy with the tools in `tools/ste-dictionary/`.
 
 ## What the linter checks
 
@@ -231,7 +239,7 @@ include passive voice and compound tenses.
 No. Plain mode works without it. Strict mode is more accurate with it, but
 ASD owns the dictionary. It is not redistributed here. Get the free copy at
 asd-ste100.org and build your own word lists with the tools in
-`tools/ste-dictionary/`.
+`tools/ste-dictionary/`. Then run `ste-lint.py --dict` to check vocabulary.
 
 **Will the linter change my files?**
 

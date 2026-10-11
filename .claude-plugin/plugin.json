@@ -54,5 +54,6 @@
         ]
       }
     ]
-  }
+  },
+  "outputStyles": "./output-styles/"
 }
