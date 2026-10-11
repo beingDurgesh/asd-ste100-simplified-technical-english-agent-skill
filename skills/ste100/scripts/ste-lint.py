@@ -25,6 +25,62 @@ import sys
 # Irregular past participles used by the present-perfect heuristic.
 IRREGULAR_PARTICIPLES = "given|taken|made|done|found|seen|known|shown|written|built|sent|set|run|read|kept|held|left|put|cut|hit|let|shut|split|spread|begun|become|come|gone|got|gotten|lost|met|paid|said|sold|told|thought|brought|bought|caught|taught|won|worn|torn|born|drawn|grown|thrown|flown|driven|risen|chosen|broken|spoken|frozen|hidden|ridden|forgotten|fallen|eaten|beaten|understood|stood|struck|stuck|swung|hung|led|fed|bled|fled|sped|bound|wound|dug|spun|slid|bit|lit|quit"
 
+# Words that break a noun cluster: articles, prepositions, conjunctions,
+# relative pronouns, verbs, and sentence punctuation. A run of 4+ consecutive
+# lowercase words not in this set is a likely multi-word noun (Rule 2.1).
+NOUN_CLUSTER_BREAKERS = {
+    "a", "an", "the", "and", "or", "but", "if", "then", "for", "nor",
+    "of", "on", "in", "at", "by", "to", "from", "with", "as", "into",
+    "about", "above", "after", "against", "among", "between", "through",
+    "during", "before", "without", "within", "under", "over", "per", "vs",
+    "is", "are", "was", "were", "be", "been", "being", "am", "do", "does",
+    "did", "have", "has", "had", "can", "could", "will", "would", "shall",
+    "should", "may", "might", "must", "not", "no", "yes", "this", "that",
+    "these", "those", "which", "who", "whom", "whose", "when", "where",
+    "why", "how", "all", "any", "both", "each", "few", "more", "most",
+    "other", "some", "such", "only", "own", "same", "so", "than", "too",
+    "very", "just", "also", "now", "here", "there", "then", "than",
+}
+
+NOUN_CLUSTER_MIN = 4  # consecutive content words that flag a noun cluster
+
+def _find_noun_clusters(line, source_column, lineno, filename, findings):
+    """Detect runs of 4+ consecutive lowercase content words (Rule 2.1).
+
+    Uses a simple heuristic: split on spaces, skip words in the breaker set,
+    skip capitalized words (likely sentence starts or proper nouns), and
+    flag runs of NOUN_CLUSTER_MIN or more. This is not a parser and will
+    false-positive on some legitimate prose, but it catches the most common
+    and most damaging STE violation: a wall of nouns.
+    """
+    tokens = re.split(r"\s+", line.strip())
+    run = []
+    for tok in tokens:
+        clean = re.sub(r"[^a-zA-Z]", "", tok)
+        if not clean:
+            continue
+        lower = clean.lower()
+        if clean[0].isupper() or lower in NOUN_CLUSTER_BREAKERS:
+            run = []
+            continue
+        run.append((tok, lower))
+        if len(run) >= NOUN_CLUSTER_MIN:
+            start_col = source_column + 1
+            for t, _ in run:
+                start_col += len(t) + 1
+            start_col -= len(run[-1][0]) + 1
+            findings.append({
+                "file": filename, "line": lineno, "col": start_col,
+                "rule": "noun-cluster", "level": "advisory-free",
+                "match": " ".join(t for t, _ in run),
+                "message": (
+                    f"{len(run)} consecutive nouns. Break with prepositions "
+                    f"(of, on, in, for) or use a short form (Rule 2.1)."
+                ),
+            })
+            return  # one finding per line is enough
+
+
 # Preserve the original passive heuristic; perfects also include intransitive verbs.
 PASSIVE_PARTICIPLES = "given|taken|made|done|found|seen|known|shown|written|built|sent|set|run|read|kept|held|left|put"
 MODAL_PERFECT_PREFIX = re.compile(
@@ -69,6 +125,12 @@ SYNONYM_GROUPS = [
 ]
 
 MAX_WORDS = 25  # descriptions cap; instructions cap is 20 but undetectable without context
+# In --terse mode, the cap relaxes to 40 words. Terse mode is for scripts,
+# internal tools, and chat replies where full STE grammar is overkill.
+# It still bans phrasal verbs, marketing adjectives, nominalizations, and
+# semicolons. It drops the anti-contraction rule (4.2) and the long-sentence
+# cap. Use it deliberately: it is a relaxation, not a different standard.
+TERSE_MAX_WORDS = 40
 
 CODE_FENCE = re.compile(r"^(```|~~~)")
 INLINE_CODE = re.compile(r"`[^`]*`")
@@ -229,7 +291,7 @@ def _dangling_conjunction_findings(text, filename):
             })
         index = next_index
     return findings
-def lint(text, filename="<stdin>"):
+def lint(text, filename="<stdin>", terse=False):
     findings = []
     in_fence = False
     lines = text.splitlines()
@@ -261,12 +323,14 @@ def lint(text, filename="<stdin>"):
                         seen_synonyms[(gi, base)] = (lineno, source_column + m.start() + 1, m.group(0))
             for sent in re.split(r"(?<=[.!?])\s+", line):
                 n = len(sent.split())
-                if n > MAX_WORDS:
+                cap = TERSE_MAX_WORDS if terse else MAX_WORDS
+                if n > cap:
                     findings.append({"file": filename, "line": lineno,
                                      "col": source_column + 1,
                                      "rule": "long-sentence", "level": "advisory-free",
                                      "match": f"{n} words",
                                      "message": f"Sentence has {n} words (cap {MAX_WORDS}). Split it."})
+            _find_noun_clusters(line, source_column, lineno, filename, findings)
     for gi, group in enumerate(SYNONYM_GROUPS):
         present = [(seen_synonyms[(gi, b)], b) for b in group if (gi, b) in seen_synonyms]
         if len(present) > 1:
@@ -294,6 +358,85 @@ def report(findings, words_total, as_json, hard_count, baseline):
     print("Hedges/modality (may, might, could) are never flagged: confidence is content.")
 
 
+
+
+
+# Mechanical fixes for rules that have deterministic replacements.
+# Each entry maps a rule id to (pattern, replacement_or_dict).
+# Rules that need judgment (passive voice, synonym choice, long sentences)
+# are intentionally excluded: a linter cannot know the right actor or
+# the right synonym without context.
+FIX_RULES = {
+    "semicolon": (re.compile(r";"), "."),
+    "phrasal-verb": (
+        re.compile(
+            r"\b(spin(?:ning|s)? up|spun up|reach(?:ing|es|ed)? out|"
+            r"div(?:e|es|ing|ed) into|dove into|kick(?:ing|s|ed)? off|"
+            r"circl(?:e|es|ing|ed) back|touch(?:ing|es|ed)? base)\b",
+            re.I,
+        ),
+        {
+            "spin up": "start", "spinning up": "starting", "spun up": "started",
+            "reach out": "contact", "reaching out": "contacting", "reached out": "contacted",
+            "dive into": "read", "diving into": "reading", "dived into": "read",
+            "dove into": "read",
+            "kick off": "begin", "kicking off": "beginning", "kicked off": "began",
+            "circle back": "return", "circling back": "returning", "circled back": "returned",
+            "touch base": "check", "touching base": "checking", "touched base": "checked",
+        },
+    ),
+    "marketing-adjective": (
+        re.compile(
+            r"\b(seamless(?:ly)?|robust(?:ly)?|cutting-edge|"
+            r"effortless(?:ly)?|blazing[- ]fast|world-class|"
+            r"state-of-the-art|game-chang(?:ing|er))\b",
+            re.I,
+        ),
+        {
+            "seamless": "", "seamlessly": "", "robust": "", "robustly": "",
+            "cutting-edge": "", "effortless": "", "effortlessly": "",
+            "blazing fast": "", "blazing-fast": "", "world-class": "",
+            "state-of-the-art": "", "game-changer": "", "game-changing": "",
+        },
+    ),
+}
+
+
+def _apply_fixes(text):
+    """Apply deterministic fixes. Returns (fixed_text, fixes_applied)."""
+    fixes = []
+    for rule_id, (pattern, replacement) in FIX_RULES.items():
+        if isinstance(replacement, str):
+            new_text, count = pattern.subn(replacement, text)
+        else:
+            def repl(m):
+                word = m.group(0)
+                lower = word.lower()
+                if lower in replacement:
+                    new_word = replacement[lower]
+                    return new_word if new_word else ""
+                return word
+            new_text, count = pattern.subn(repl, text)
+        if count:
+            fixes.append((rule_id, count))
+        text = new_text
+    # Clean up double spaces left by removed adjectives
+    text = re.sub(r"  +", " ", text)
+    return text, fixes
+
+
+def fix_files(files, dry_run=False):
+    """Apply mechanical fixes to files. Returns list of (filename, fixes)."""
+    results = []
+    for filename in files:
+        with open(filename, "r") as f:
+            original = f.read()
+        fixed, fixes = _apply_fixes(original)
+        if fixes and not dry_run:
+            with open(filename, "w") as f:
+                f.write(fixed)
+        results.append((filename, fixes))
+    return results
 
 def selftest():
     """Run the invariants. Exit 0 on success, 1 on failure."""
@@ -336,6 +479,16 @@ def selftest():
         f["rule"] == "dangling-conjunction" for f in lint(list_text)
     ))
 
+    noun_text = "The connection pool timeout configuration value is set."
+    check("noun cluster fires", any(
+        f["rule"] == "noun-cluster" for f in lint(noun_text)
+    ))
+
+    normal_text = "Open the valve. Check the pressure."
+    check("noun cluster does not fire on normal text", not any(
+        f["rule"] == "noun-cluster" for f in lint(normal_text)
+    ))
+
     if failures:
         for name in failures:
             print("SELFTEST FAIL: " + name, file=sys.stderr)
@@ -347,6 +500,9 @@ def main(argv):
     baseline = 0
     disable = set()
     as_json = False
+    fix = False
+    dry_run = False
+    terse = False
     files = []
     i = 0
     while i < len(args):
@@ -359,13 +515,19 @@ def main(argv):
             as_json = True; i += 1; continue
         if a == "--selftest":
             return selftest()
+        if a == "--fix":
+            fix = True; i += 1; continue
+        if a == "--dry-run":
+            dry_run = True; i += 1; continue
+        if a == "--terse":
+            terse = True; i += 1; continue
         if a.startswith("-"):
             print(f"unknown flag: {a}", file=sys.stderr); return 2
         files.append(a); i += 1
 
     if not files:
         text = sys.stdin.read()
-        findings = [f for f in lint(text) if f["rule"] not in disable]
+        findings = [f for f in lint(text, terse=terse) if f["rule"] not in disable]
         hard = [f for f in findings if f["level"] == "advisory-free"]
         report(findings, _count_words(text), as_json, len(hard), baseline)
         return 1 if len(hard) > baseline else 0
@@ -380,10 +542,19 @@ def main(argv):
             print(f"cannot read {path}: {exc}", file=sys.stderr)
             return 2
         total_words += _count_words(text)
-        for f in lint(text, filename=path):
+        for f in lint(text, filename=path, terse=terse):
             if f["rule"] not in disable:
                 all_findings.append(f)
     hard = [f for f in all_findings if f["level"] == "advisory-free"]
+    if dry_run:
+        for filename, fixes in fix_files(files, dry_run=True):
+            for rule_id, count in fixes:
+                print(f"{filename}: would fix {count} {rule_id}")
+        return 0
+    if fix:
+        for filename, fixes in fix_files(files):
+            for rule_id, count in fixes:
+                print(f"{filename}: fixed {count} {rule_id}")
     report(all_findings, total_words, as_json, len(hard), baseline)
     return 1 if len(hard) > baseline else 0
 
