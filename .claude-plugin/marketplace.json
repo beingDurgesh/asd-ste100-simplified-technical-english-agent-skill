@@ -2,7 +2,7 @@
   "name": "asd-ste100",
   "owner": {
     "name": "asd-ste100-skill",
-    "url": "https://github.com/danyuchn/asd-ste100-skill"
+    "url": "https://github.com/imakeshit/ASD-STE100-for-CS"
   },
   "description": "ASD-STE100 Simplified Technical English skill for clear, unambiguous technical writing with a structural linter, auto-fix, terse mode, and generated dictionary.",
   "plugins": [

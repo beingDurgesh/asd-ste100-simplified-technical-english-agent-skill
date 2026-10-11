@@ -25,14 +25,14 @@ Loads the rules automatically on every session start. No need to name the skill.
 Claude Code:
 
 ```
-claude plugin marketplace add danyuchn/asd-ste100-skill
+claude plugin marketplace add imakeshit/ASD-STE100-for-CS
 claude plugin install asd-ste100@asd-ste100
 ```
 
 Codex:
 
 ```
-codex plugin marketplace add danyuchn/asd-ste100-skill
+codex plugin marketplace add imakeshit/ASD-STE100-for-CS
 codex plugin add asd-ste100@asd-ste100
 ```
 
