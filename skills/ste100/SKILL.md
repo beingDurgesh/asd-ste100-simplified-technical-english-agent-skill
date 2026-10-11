@@ -15,7 +15,7 @@ description: |
   cannot misread this", or "controlled-language rewrite". The same rules
   govern the reply: answer first, prose only.
 license: MIT
-compatibility: claude-code cursor codex gemini-cli opencode
+compatibility: claude-code cursor codex gemini-cli opencode antigravity
 metadata:
   version: "1.0.0"
   standard: ASD-STE100 Issue 9 (2025-01-15)

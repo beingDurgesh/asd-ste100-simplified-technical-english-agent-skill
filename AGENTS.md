@@ -6,7 +6,7 @@ agent that reads AGENTS.md) the STE100 skill on demand.
 ## Skill
 
 The skill lives in `skills/ste100/SKILL.md`. It is a front-matter skill that
-works with Claude Code, Codex, Cursor, Gemini CLI, and OpenCode.
+works with Claude Code, Codex, Cursor, Gemini CLI, OpenCode, and Antigravity CLI.
 
 Load it when the user asks to:
 
