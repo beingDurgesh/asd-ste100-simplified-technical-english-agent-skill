@@ -25,14 +25,14 @@ Loads the rules automatically on every session start. No need to name the skill.
 Claude Code:
 
 ```
-claude plugin marketplace add imakeshit/ASD-STE100-for-CS
+claude plugin marketplace add beingDurgesh/asd-ste100-simplified-technical-english-agent-skill
 claude plugin install asd-ste100@asd-ste100
 ```
 
 Codex:
 
 ```
-codex plugin marketplace add imakeshit/ASD-STE100-for-CS
+codex plugin marketplace add beingDurgesh/asd-ste100-simplified-technical-english-agent-skill
 codex plugin add asd-ste100@asd-ste100
 ```
 

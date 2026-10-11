@@ -5,8 +5,8 @@
   "author": {
     "name": "asd-ste100-skill"
   },
-  "homepage": "https://github.com/imakeshit/ASD-STE100-for-CS",
-  "repository": "https://github.com/imakeshit/ASD-STE100-for-CS",
+  "homepage": "https://github.com/beingDurgesh/asd-ste100-simplified-technical-english-agent-skill",
+  "repository": "https://github.com/beingDurgesh/asd-ste100-simplified-technical-english-agent-skill",
   "license": "MIT",
   "keywords": [
     "technical-writing",
@@ -27,7 +27,7 @@
     "capabilities": [
       "Write"
     ],
-    "websiteURL": "https://github.com/imakeshit/ASD-STE100-for-CS",
+    "websiteURL": "https://github.com/beingDurgesh/asd-ste100-simplified-technical-english-agent-skill",
     "defaultPrompt": [
       "Rewrite this technical text in ASD-STE100 Simplified Technical English.",
       "Write this procedure with STE rules.",
