@@ -7,7 +7,7 @@ Usage:
 
 Reads not-approved.tsv (from emit.py) and reports every word that the
 standard does not approve, with the approved alternatives. Also counts
-the LLM-tell words from evals/slop.tsv as a separate number.
+the LLM-tell words from skills/ste100/slop.tsv as a separate number.
 
 Known limit: the match is on the base form and simple inflections, with
 no part-of-speech disambiguation. Numbers from this tool compare two
@@ -24,7 +24,11 @@ DICT_CANDIDATES = [
     Path("not-approved.tsv"),
     Path(__file__).resolve().parent / "not-approved.tsv",
 ]
-SLOP = ROOT / "evals" / "slop.tsv"
+SLOP_CANDIDATES = [
+    ROOT / "skills" / "ste100" / "slop.tsv",
+    ROOT / "evals" / "slop.tsv",
+]
+SLOP = next((p for p in SLOP_CANDIDATES if p.is_file()), SLOP_CANDIDATES[0])
 
 # Simple inflection rules applied before lookup.
 INFLECTIONS = [

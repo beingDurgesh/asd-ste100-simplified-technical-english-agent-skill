@@ -5,7 +5,7 @@ loads the ASD-STE100 writing rules when a session starts, resumes, clears, or
 compacts. You do not need to name the skill.
 
 The hook needs Node.js. Both plugins run
-`src/hooks/ste100-activate.js` with the `node` command.
+`skills/ste100/hooks/ste100-activate.js` with the `node` command.
 
 ## Install
 
@@ -28,7 +28,7 @@ Codex asks you to review and trust the hook before its first run. Open
 
 ## What the hook sends
 
-The hook writes the fenced rule block of `prompts/system-prompt.md` to
+The hook writes the fenced rule block of `skills/ste100/prompts/system-prompt.md` to
 standard output. The page title, the paste instructions, and the word-budget
 variant stay out. The full skill, `skills/ste100/SKILL.md`, is about 7,500
 characters, and Claude Code caps hook output at 10,000 characters. Output over
@@ -56,7 +56,7 @@ still starts.
 Two more hooks run under Claude Code, both advisory. Neither one blocks.
 
 - `PostToolUse` on `Write` and `Edit`: when the file is Markdown,
-  `src/hooks/lint_hook.py` lints it with
+  `skills/ste100/hooks/lint_hook.py` lints it with
   `skills/ste100/scripts/ste-lint.py` and shows a summary of the violations
   to the model.
 - `Stop`: the same script reads the last reply and adds a system message
@@ -64,7 +64,7 @@ Two more hooks run under Claude Code, both advisory. Neither one blocks.
   item, a filler opener or closer, or a slop word.
 
 Codex runs only the `SessionStart` hook. Test the checks with
-`python src/hooks/test_lint_hook.py`.
+`python skills/ste100/hooks/test_lint_hook.py`.
 
 ## What the file check skips
 
@@ -101,5 +101,5 @@ stays on.
 From the repository root:
 
 ```
-python src/hooks/test_lint_hook.py
+python skills/ste100/hooks/test_lint_hook.py
 ```

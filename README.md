@@ -62,6 +62,9 @@ the agent picks it up without a skills directory:
 | `.cursor/rules/ste100.mdc` | Cursor rules |
 | `.github/copilot-instructions.md` | GitHub Copilot |
 | `.claude-plugin/plugin.json` | Claude Code plugin manifest |
+| `skills/ste100/hooks/` | SessionStart, PostToolUse, and Stop hooks |
+| `skills/ste100/prompts/system-prompt.md` | Compact rule block for the hook payload |
+| `skills/ste100/slop.tsv` | LLM-tell words counted by the dictionary linter |
 
 ## Dictionary toolchain
 
@@ -92,8 +95,15 @@ skills/ste100/
 │   ├── strict-vocabulary.md  # part-of-speech rulings, dictionary rulings
 │   ├── word-swaps.md     # 70+ slop → simple replacements
 │   └── use-cases.md      # error messages, runbooks, incident reports, etc.
-└── scripts/
-    └── ste-lint.py       # deterministic linter for the structural rules
+├── scripts/
+│   └── ste-lint.py       # deterministic linter for the structural rules
+├── hooks/                # Claude Code and Codex hooks (SessionStart, PostToolUse, Stop)
+│   ├── ste100-activate.js
+│   ├── lint_hook.py
+│   └── test_lint_hook.py
+├── prompts/
+│   └── system-prompt.md  # compact rule block for the hook payload
+└── slop.tsv              # LLM-tell words counted by the dictionary linter
 ```
 
 ## Using the linter

@@ -1,15 +1,15 @@
 """Eval harness: run the STE linter over a directory of text files.
 
 Usage:
-    python3 evals/ste_lint.py PATH [--json] [--baseline N] [--disable x,y]
+    python3 skills/ste100/evals/ste_lint.py PATH [--json] [--baseline N] [--disable x,y]
 """
 import argparse
 import os
 import subprocess
 import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LINTER = os.path.join(ROOT, "skills", "ste100", "scripts", "ste-lint.py")
+ROOT = os.path.dirname(os.path.abspath(__file__))
+LINTER = os.path.join(ROOT, "..", "scripts", "ste-lint.py")
 
 
 def main():

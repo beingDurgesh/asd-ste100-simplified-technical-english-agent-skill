@@ -9,7 +9,13 @@
   after Write/Edit and check the reply register for em-dashes, bold,
   headers, bullets, and filler openers/closers. Neither hook blocks.
 - Output style for Claude Code (`output-styles/simple-english.md`).
-- Compact system prompt (`prompts/system-prompt.md`) for the hook payload.
+- Compact system prompt (`skills/ste100/prompts/system-prompt.md`) for the hook
+  payload.
+- Hooks, the slop word list, and the compact prompt moved inside
+  `skills/ste100/` so `npx skills add` installs them with the skill instead of
+  leaving them in the repo root.
+- Linter `--fix` no longer leaves `****` behind when it deletes a marketing
+  adjective wrapped in bold (`**seamless**`).
 - Marketplace catalog (`.claude-plugin/marketplace.json`,
   `.agents/plugins/marketplace.json`).
 

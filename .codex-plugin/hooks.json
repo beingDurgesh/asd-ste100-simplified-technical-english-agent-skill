@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -n \"${PLUGIN_ROOT}\" ] && node \"${PLUGIN_ROOT}/src/hooks/ste100-activate.js\" || true",
+            "command": "[ -n \"${PLUGIN_ROOT}\" ] && node \"${PLUGIN_ROOT}/skills/ste100/hooks/ste100-activate.js\" || true",
             "timeout": 5,
             "statusMessage": "Loading ASD-STE100...",
             "additionalContextLimit": 0

@@ -46,10 +46,11 @@ Do not commit them.
 
 ## Lint word choice
 
-`evals/ste_lint.py` measures the mechanical rules. It does not see word
-choice. `ste_dict_lint.py` reads `not-approved.tsv` and reports each word
-that the standard does not approve, with the approved alternatives. It also
-counts the LLM-tell words from `evals/slop.tsv` as a separate number.
+`skills/ste100/evals/ste_lint.py` measures the mechanical rules. It does not
+see word choice. `ste_dict_lint.py` reads `not-approved.tsv` and reports each
+word that the standard does not approve, with the approved alternatives. It
+also counts the LLM-tell words from `skills/ste100/slop.tsv` as a separate
+number.
 
 ```
 python3 ste_dict_lint.py file.md

@@ -386,8 +386,13 @@ FIX_RULES = {
         },
     ),
     "marketing-adjective": (
+        # Consume a leading/trailing bold span together with the word, so
+        # **seamless** deletes as one unit instead of leaving **** behind.
         re.compile(
-            r"\b(seamless(?:ly)?|robust(?:ly)?|cutting-edge|"
+            r"\*\*(seamless(?:ly)?|robust(?:ly)?|cutting-edge|"
+            r"effortless(?:ly)?|blazing[- ]fast|world-class|"
+            r"state-of-the-art|game-chang(?:ing|er))\*\*"
+            r"|\b(seamless(?:ly)?|robust(?:ly)?|cutting-edge|"
             r"effortless(?:ly)?|blazing[- ]fast|world-class|"
             r"state-of-the-art|game-chang(?:ing|er))\b",
             re.I,
@@ -411,7 +416,10 @@ def _apply_fixes(text):
         else:
             def repl(m):
                 word = m.group(0)
-                lower = word.lower()
+                # The marketing-adjective pattern may have consumed a bold
+                # span (**seamless**). Strip it before the dict lookup.
+                stripped = word.strip("*")
+                lower = stripped.lower()
                 if lower in replacement:
                     new_word = replacement[lower]
                     return new_word if new_word else ""

@@ -24,8 +24,8 @@ import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
-LINTER = ROOT / "skills" / "ste100" / "scripts" / "ste-lint.py"
-SLOP = ROOT / "evals" / "slop.tsv"
+LINTER = HERE.parent / "scripts" / "ste-lint.py"
+SLOP = HERE.parent / "slop.tsv"
 
 MAX_HOOK_HITS = 12
 CLAUDE_DIR = ".claude"

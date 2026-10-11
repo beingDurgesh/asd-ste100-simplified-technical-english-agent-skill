@@ -1,6 +1,6 @@
 """Tests for the plugin hooks.
 
-Run with:  python src/hooks/test_lint_hook.py
+Run with:  python skills/ste100/hooks/test_lint_hook.py
 """
 
 import json

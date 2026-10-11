@@ -25,7 +25,9 @@ function candidates(pluginRoot, hookDirectory, relative) {
   if (pluginRoot) {
     roots.push(pluginRoot);
   }
-  roots.push(path.join(hookDirectory, '..', '..'), path.join(hookDirectory, '..'));
+  // The hook lives at skills/ste100/hooks/ and the prompt at
+  // skills/ste100/prompts/system-prompt.md, one directory up.
+  roots.push(path.join(hookDirectory, '..'));
   return roots.map((root) => path.join(root, ...relative));
 }
 

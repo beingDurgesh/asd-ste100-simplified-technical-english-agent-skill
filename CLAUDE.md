@@ -35,11 +35,11 @@ python3 skills/ste100/scripts/ste-lint.py path/to/file.md
 python3 skills/ste100/scripts/ste-lint.py --json --baseline 5 file.md
 ```
 
-The eval harness at `evals/ste_lint.py` walks a directory and lints every
-`.md` and `.txt` file:
+The eval harness at `skills/ste100/evals/ste_lint.py` walks a directory and
+lints every `.md` and `.txt` file:
 
 ```
-python3 evals/ste_lint.py examples --baseline 5
+python3 skills/ste100/evals/ste_lint.py examples --baseline 5
 ```
 
 ## Dictionary toolchain
