@@ -18,6 +18,30 @@ The same rules govern the reply the agent types in chat.
 
 ## Installation
 
+### As a plugin (recommended)
+
+Loads the rules automatically on every session start. No need to name the skill.
+
+Claude Code:
+
+```
+claude plugin marketplace add danyuchn/asd-ste100-skill
+claude plugin install asd-ste100@asd-ste100
+```
+
+Codex:
+
+```
+codex plugin marketplace add danyuchn/asd-ste100-skill
+codex plugin add asd-ste100@asd-ste100
+```
+
+The plugin runs a `SessionStart` hook that injects the condensed rule block into
+context, plus advisory `PostToolUse` and `Stop` checks under Claude Code that
+lint Markdown files and reply register without ever blocking.
+
+### As a skill
+
 ```
 cp -r asd-ste100-skill ~/.agent/skills/
 ```
