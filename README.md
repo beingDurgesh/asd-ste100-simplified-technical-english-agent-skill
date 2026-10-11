@@ -16,9 +16,7 @@ Two registers, both short:
 
 The same rules govern the reply the agent types in chat.
 
-## Installation
-
-### Quick install (recommended)
+## Install
 
 ```
 npx skills add beingDurgesh/asd-ste100-simplified-technical-english-agent-skill
@@ -27,73 +25,22 @@ npx skills add beingDurgesh/asd-ste100-simplified-technical-english-agent-skill
 This pulls the skill from the GitHub repo and installs it for the current
 project. Update later with `npx skills update`.
 
-### As a plugin
+## Use it
 
-Loads the rules automatically on every session start. No need to name the skill.
+Ask your agent to:
 
-Claude Code:
+- Write or rewrite text in ASD-STE100 Simplified Technical English
+- Disambiguate text, or rewrite so an agent cannot misread it
+- Remove jargon, slop, or AI writing from docs, prompts, or replies
+- Write or check error messages, runbooks, incident reports, release notes,
+  commit messages, agent prompts, or UI copy
 
-```
-claude plugin marketplace add beingDurgesh/asd-ste100-simplified-technical-english-agent-skill
-claude plugin install asd-ste100@asd-ste100
-```
+Trigger phrases: "STE", "Simplified Technical English", "plain English",
+"layman terms", "explain it simply", "no jargon", "de-slop", "make this
+readable", "write for non-native readers", "disambiguate this",
+"controlled-language rewrite".
 
-Codex:
-
-```
-codex plugin marketplace add beingDurgesh/asd-ste100-simplified-technical-english-agent-skill
-codex plugin add asd-ste100@asd-ste100
-```
-
-The plugin runs a `SessionStart` hook that injects the condensed rule block into
-context, plus advisory `PostToolUse` and `Stop` checks under Claude Code that
-lint Markdown files and reply register without ever blocking.
-
-### As a skill
-
-```
-cp -r asd-ste100-skill ~/.agent/skills/
-```
-
-Or drop the `skills/ste100/` folder into any skills directory the agent reads.
-No install step, no network calls, no dependencies beyond the standard library.
-
-## Agent integration files
-
-The repo ships the same skill in every agent's native instruction file, so
-the agent picks it up without a skills directory:
-
-| File | Agent |
-|---|---|
-| `CLAUDE.md` | Claude Code |
-| `AGENTS.md` | Codex, OpenCode, and any AGENTS.md reader |
-| `GEMINI.md` | Gemini CLI |
-| `.cursor/rules/ste100.mdc` | Cursor rules |
-| `.github/copilot-instructions.md` | GitHub Copilot |
-| `.claude-plugin/plugin.json` | Claude Code plugin manifest |
-| `skills/ste100/hooks/` | SessionStart, PostToolUse, and Stop hooks |
-| `skills/ste100/prompts/system-prompt.md` | Compact rule block for the hook payload |
-| `skills/ste100/slop.tsv` | LLM-tell words counted by the dictionary linter |
-
-## Dictionary toolchain
-
-The official ASD dictionary is copyrighted and not redistributed. To build
-the dictionary-backed checker from your own free PDF copy:
-
-```
-pdftotext -layout -enc UTF-8 your_ste100.pdf ste.txt
-python3 tools/ste-dictionary/parse_dict.py ste.txt
-python3 tools/ste-dictionary/emit.py
-python3 tools/ste-dictionary/ste_dict_lint.py --self-test
-```
-
-This produces `tools/ste-dictionary/not-approved.tsv`, which
-`ste_dict_lint.py` uses to flag non-approved words with their approved
-alternatives. The parser classifies entries by **word-column case**
-(UPPERCASE = approved, lowercase = not-approved), per the standard's rule on
-page 2-0-9. Inflected forms inherit the headword's status.
-
-## Files
+## The skill
 
 ```
 skills/ste100/
@@ -104,18 +51,11 @@ skills/ste100/
 │   ├── strict-vocabulary.md  # part-of-speech rulings, dictionary rulings
 │   ├── word-swaps.md     # 70+ slop → simple replacements
 │   └── use-cases.md      # error messages, runbooks, incident reports, etc.
-├── scripts/
-│   └── ste-lint.py       # deterministic linter for the structural rules
-├── hooks/                # Claude Code and Codex hooks (SessionStart, PostToolUse, Stop)
-│   ├── ste100-activate.js
-│   ├── lint_hook.py
-│   └── test_lint_hook.py
-├── prompts/
-│   └── system-prompt.md  # compact rule block for the hook payload
-└── slop.tsv              # LLM-tell words counted by the dictionary linter
+└── scripts/
+    └── ste-lint.py       # deterministic linter for the structural rules
 ```
 
-## Using the linter
+## The linter
 
 ```
 python3 skills/ste100/scripts/ste-lint.py README.md
