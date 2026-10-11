@@ -1,0 +1,16 @@
+{
+  "name": "asd-ste100",
+  "interface": {
+    "displayName": "ASD-STE100"
+  },
+  "plugins": [
+    {
+      "name": "asd-ste100",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
