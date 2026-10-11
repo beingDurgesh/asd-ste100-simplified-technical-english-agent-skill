@@ -143,7 +143,3 @@ with suggested replacements. That dictionary is copyrighted by ASD and is **not*
 redistributed here. Get the free official copy at
 [asd-ste100.org](https://www.asd-ste100.org) and make your own word lists from
 it. This package teaches the rules; it is lossy on vocabulary.
-
-## License
-
-MIT — see [LICENSE](LICENSE).

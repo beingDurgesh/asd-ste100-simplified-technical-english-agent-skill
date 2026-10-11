@@ -14,7 +14,6 @@ description: |
   "write for non-native readers", "disambiguate this", "rewrite so an agent
   cannot misread this", or "controlled-language rewrite". The same rules
   govern the reply: answer first, prose only.
-license: MIT
 compatibility: claude-code cursor codex gemini-cli opencode antigravity
 metadata:
   version: "1.0.0"
