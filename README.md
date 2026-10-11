@@ -51,11 +51,12 @@ lint Markdown files and reply register without ever blocking.
 
 ### As a skill
 
-```
-cp -r asd-ste100-skill ~/.agent/skills/
-```
+Copy the skill folder into any skills directory your agent reads. From inside
+the cloned repo:
 
-Or drop the `skills/ste100/` folder into any skills directory the agent reads.
+```
+cp -r skills/ste100 ~/.agent/skills/ste100
+```
 No install step, no network calls, no dependencies beyond the standard library.
 
 ## Before and after
