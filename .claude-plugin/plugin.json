@@ -1,0 +1,58 @@
+{
+  "name": "asd-ste100",
+  "displayName": "ASD-STE100",
+  "description": "Write or rewrite text in ASD-STE100 Simplified Technical English: short sentences, active voice, simple tenses, one word one meaning, condition before command, every technical term defined at first use, no AI slop. Includes a structural linter with auto-fix, terse mode, and a generated dictionary.",
+  "version": "1.0.0",
+  "author": {
+    "name": "asd-ste100-skill"
+  },
+  "homepage": "https://github.com/beingDurgesh/asd-ste100-simplified-technical-english-agent-skill",
+  "repository": "https://github.com/beingDurgesh/asd-ste100-simplified-technical-english-agent-skill",
+  "keywords": [
+    "technical-writing",
+    "documentation",
+    "ste",
+    "asd-ste100",
+    "linter",
+    "controlled-language"
+  ],
+  "skills": "./skills/",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/skills/ste100/hooks/ste100-activate.js\"",
+            "timeout": 5,
+            "statusMessage": "Loading ASD-STE100..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/skills/ste100/hooks/lint_hook.py\"",
+            "timeout": 10,
+            "statusMessage": "ASD-STE100: checking the file..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/skills/ste100/hooks/lint_hook.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
