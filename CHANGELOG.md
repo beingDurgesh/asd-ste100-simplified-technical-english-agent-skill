@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.4 — 2026-10-12
+
+- Documented how the hedge rewrite preserves uncertainty. The README now
+  explains that the "It is possible that" construction is the standard's
+  own example for the approved adjective POSSIBLE, that the past tense
+  stays simple under Rule 3.2, and that a rewrite never turns a hedge into
+  a certainty. Added a second worked example ("It is not known whether
+  the update caused the outage.") for the case where the cause is unknown.
+
 ## 1.0.3 — 2026-10-11
 
 - Added `opencode/slash: "true"` metadata to `SKILL.md`, exposing the skill

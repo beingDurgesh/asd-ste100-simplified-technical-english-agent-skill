@@ -92,9 +92,49 @@ After:
 > Use the configuration panel to change the settings. The system then runs
 > the update.
 
+### Hedges and uncertainty
+
+A rewrite can keep a hedge without using a banned modal. The standard
+gives the approved adjective for past possibility.
+
+Before:
+
+> The update may have caused the outage.
+
+After:
+
+> It is possible that the update caused the outage.
+
 Strict mode is on when you name STE, ASD-STE100, or compliance. No tool
 guarantees full compliance, because the official dictionary is copyrighted
 and is a free download at asd-ste100.org.
+
+#### How the hedge rewrite works
+
+The sentence keeps its uncertainty and drops the banned modal. The
+adjective POSSIBLE is approved in the standard, and the "It is possible
+that" construction is the standard's own example for it. The past tense
+(caused) stays simple, which satisfies Rule 3.2. No cause is asserted:
+the reader still does not know whether the update was the cause.
+
+A rewrite never turns a hedge into a certainty. If the cause is unknown,
+say so directly:
+
+Before:
+
+> The update may or may not have caused the outage.
+
+After:
+
+> It is not known whether the update caused the outage.
+
+The linter does not check this. Rule 3.2 and the modal ladder ban
+`may`, `might`, and `could`, but the linter deliberately never flags them:
+in STE, confidence is content, and a linter that pressures hedges out
+would rewrite claims. The linter cannot tell a factual hedge from a
+polite one, so it leaves both alone. A clean linter pass is not a
+compliance certificate. The writer restructures. The linter only checks
+the result.
 
 ## Use it
 
@@ -181,6 +221,13 @@ conjunctions, and noun clusters are checked. The linter deliberately never
 flags hedges or modality (`may`, `might`, `could`): in STE, confidence is
 content, and a linter that pressures hedges out would rewrite claims.
 
+A clean linter pass does not mean the text is compliant. The linter cannot
+tell a factual hedge from a polite one, so it leaves both alone and you
+decide. Rule 3.2 and the modal ladder still prohibit `may`, `might`, and `could`:
+the writer restructures, the linter only checks the result. For past
+possibility the standard uses the approved adjective: "It is possible that
+the update caused the outage", not "The update may have caused the outage."
+
 ## Dictionary toolchain
 
 The official ASD dictionary is copyrighted. It is not redistributed. To build
@@ -232,6 +279,11 @@ The linter is advisory by design. It never flags hedges or modality (`may`,
 `might`, `could`): in STE, confidence is content and a linter that pressures
 hedges out would rewrite claims. Advisory findings never fail a run. They
 include passive voice and compound tenses.
+
+Note that a linter pass with zero findings is not a compliance certificate.
+The linter cannot separate a factual hedge from a polite one, so it leaves
+both for you. The rules still ban `may`, `might`, and `could`. For past
+possibility write "It is possible that the update caused the outage."
 
 ## FAQ
 
