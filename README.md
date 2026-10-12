@@ -1,10 +1,13 @@
-# asd-ste100-skill
+# ASD-STE100-skill
 
-An [Agent Skills](https://github.com/agentskills/agentskills) package that makes
+An Agent Skills package that makes
 your AI agent write and rewrite text in **ASD-STE100 Simplified Technical
 English** — the controlled language behind aerospace maintenance manuals.
 
 ## What it does
+
+<img width="1024" height="768" alt="ASD-STE100 agent skill social preview 1" src="https://github.com/user-attachments/assets/5ce2f8e9-b80a-4a72-bc91-f049f7d2ea87" />
+
 
 Two registers, both short:
 
