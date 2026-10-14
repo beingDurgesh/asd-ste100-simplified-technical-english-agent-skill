@@ -5,6 +5,11 @@ your AI agent write and rewrite text in **ASD-STE100 Simplified Technical
 English** — the controlled language behind aerospace maintenance manuals.
 
 ![Pylint](https://github.com/beingDurgesh/asd-ste100-simplified-technical-english-agent-skill/actions/workflows/pylint.yml/badge.svg)
+![Python](https://img.shields.io/badge/Python-3.8%2B-FFD43B?logo=python&logoColor=3776AB&labelColor=3776AB)
+![License](https://img.shields.io/github/license/beingDurgesh/asd-ste100-simplified-technical-english-agent-skill?color=E67E22&logo=opensourceinitiative&logoColor=white)
+![Last commit](https://img.shields.io/github/last-commit/beingDurgesh/asd-ste100-simplified-technical-english-agent-skill?color=8E44AD&logo=git&logoColor=white)
+![Stars](https://img.shields.io/github/stars/beingDurgesh/asd-ste100-simplified-technical-english-agent-skill?color=F1C40F&logo=github&logoColor=white)
+![Agent Skill](https://img.shields.io/badge/Agent%20Skill-ASD--STE100-E84393)
 
 ## What it does
 
