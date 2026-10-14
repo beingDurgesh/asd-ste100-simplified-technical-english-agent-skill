@@ -176,22 +176,22 @@ the agent picks it up without a skills directory:
 
 ```
 skills/ste100/
-├── SKILL.md              # entry point: mode selection, short rule sets, references
+├── SKILL.md              
 ├── references/
-│   ├── writing-rules.md  # all 9 rule sections with citations
-│   ├── rule-catalog.md   # the 53-rule catalog + modal ladder
-│   ├── strict-vocabulary.md  # part-of-speech rulings, dictionary rulings
-│   ├── word-swaps.md     # 70+ slop → simple replacements
-│   └── use-cases.md      # error messages, runbooks, incident reports, etc.
+│   ├── writing-rules.md  
+│   ├── rule-catalog.md   
+│   ├── strict-vocabulary.md  
+│   ├── word-swaps.md     
+│   └── use-cases.md      
 ├── scripts/
-│   └── ste-lint.py       # deterministic linter for the structural rules
-├── hooks/                # Claude Code and Codex hooks (SessionStart, PostToolUse, Stop)
+│   └── ste-lint.py       
+├── hooks/               
 │   ├── ste100-activate.js
 │   ├── lint_hook.py
 │   └── test_lint_hook.py
 ├── prompts/
-│   └── system-prompt.md  # compact rule block for the hook payload
-└── slop.tsv              # LLM-tell words counted by the dictionary linter
+│   └── system-prompt.md  
+└── slop.tsv              
 ```
 
 ## Using the linter
