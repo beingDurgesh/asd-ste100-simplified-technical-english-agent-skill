@@ -13,6 +13,7 @@ LINTER = os.path.join(ROOT, "..", "scripts", "ste-lint.py")
 
 
 def main():
+    """Run the STE lint eval and print the result."""
     ap = argparse.ArgumentParser()
     ap.add_argument("path")
     ap.add_argument("--json", action="store_true")

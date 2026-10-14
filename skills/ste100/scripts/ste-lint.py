@@ -392,6 +392,7 @@ def _dangling_conjunction_findings(text, filename):
         index = next_index
     return findings
 def lint(text, filename="<stdin>", terse=False):
+    """Return the STE100 findings for the given text."""
     findings = []
     in_fence = False
     lines = text.splitlines()
@@ -445,6 +446,7 @@ def lint(text, filename="<stdin>", terse=False):
     findings.sort(key=lambda f: (f["line"], f["col"]))
     return findings
 def report(findings, words_total, as_json, hard_count, baseline):
+    """Print the findings as text or JSON."""
     rate = round(len(findings) * 100 / words_total, 1) if words_total else 0.0
     if as_json:
         print(json.dumps({"violations": findings, "count": len(findings),
@@ -612,6 +614,7 @@ def selftest():
     print("selftest: all invariants hold")
     return 0
 def main(argv):
+    """Parse the arguments and run the linter."""
     args = argv[1:]
     baseline = 0
     disable = set()

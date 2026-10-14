@@ -17,6 +17,7 @@ SPelled = re.compile(
 
 
 def main():
+    """Run the number check and print the result."""
     ap = argparse.ArgumentParser()
     ap.add_argument("path")
     args = ap.parse_args()

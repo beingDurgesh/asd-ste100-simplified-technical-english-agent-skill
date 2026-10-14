@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring,missing-class-docstring
+
 """Tests for the plugin hooks.
 
 Run with:  python skills/ste100/hooks/test_lint_hook.py

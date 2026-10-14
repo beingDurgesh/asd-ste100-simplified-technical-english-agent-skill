@@ -60,6 +60,7 @@ def _parse_findings(output):
 
 
 def strip_code(text):
+    """Remove code blocks from the text before linting."""
     text = re.sub(r"```.*?```", " ", text, flags=re.S)
     return re.sub(r"`[^`]*`", " ", text)
 
@@ -93,6 +94,7 @@ def excluded(target):
 
 
 def post_tool_use(event):
+    """Lint a Markdown file that a tool changed and report findings."""
     path = (event.get("tool_input") or {}).get("file_path") or ""
     if not path.endswith(".md"):
         return 0
@@ -118,6 +120,7 @@ def post_tool_use(event):
 
 
 def slop_words():
+    """Return the set of slop words to check for."""
     words = set()
     if SLOP.exists():
         with open(SLOP) as f:
@@ -129,6 +132,7 @@ def slop_words():
 
 
 def stop(event):
+    """Check the final answer when the agent stops."""
     reply = event.get("last_assistant_message") or ""
     problems = []
     stripped = strip_code(reply)
@@ -158,6 +162,7 @@ def stop(event):
 
 
 def main():
+    """Read the hook event and run the matching handler."""
     try:
         event = json.load(sys.stdin)
     except Exception:  # noqa: BLE001

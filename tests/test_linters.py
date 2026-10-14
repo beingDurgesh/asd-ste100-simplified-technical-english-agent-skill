@@ -1,3 +1,4 @@
+# pylint: disable=missing-function-docstring,missing-class-docstring
 """Tests for the structural STE linter.
 
 Run with:  python3 -m unittest tests.test_linters

@@ -19,6 +19,7 @@ from pathlib import Path
 
 
 def emit(dict_path, out_dir):
+    """Write the dictionary files to the output folder."""
     with open(dict_path, encoding="utf-8") as fh:
         data = json.load(fh)
 
@@ -50,6 +51,7 @@ def _find_dict():
 
 
 def main():
+    """Find the dictionary and write the output files."""
     if len(sys.argv) == 2:
         out_dir = sys.argv[1]
     else:

@@ -51,6 +51,7 @@ END_MARKERS = (
 
 
 def parse(path):
+    """Read the dictionary file and return its entries."""
     with open(path, encoding="utf-8") as fh:
         lines = fh.read().splitlines()
 
@@ -199,6 +200,7 @@ def _extract_alternatives(text):
 
 
 def main():
+    """Parse the dictionary and save the result."""
     if len(sys.argv) != 2:
         sys.exit(__doc__)
     data = parse(sys.argv[1])
