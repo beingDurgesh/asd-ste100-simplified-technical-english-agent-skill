@@ -28,14 +28,21 @@ The same rules govern the reply the agent types in chat.
 
 ## Install
 
+
 ### Quick install (recommended)
 
-```
+Install the ASD-STE100 Simplified Technical English skill in your project:
+
+```bash
 npx skills add beingDurgesh/asd-ste100-simplified-technical-english-agent-skill
 ```
 
-This pulls the skill from the GitHub repo and installs it for the current
-project. Update later with `npx skills update`.
+Update the installed skill:
+
+```bash
+npx skills update
+```
+
 
 ### As a plugin
 
