@@ -208,16 +208,32 @@ skills/ste100/
 └── slop.tsv              
 ```
 
+
 ## Using the linter
 
-```
+```bash
+# Check a Markdown file
 python3 skills/ste100/scripts/ste-lint.py README.md
+
+# Run self-tests
 python3 skills/ste100/scripts/ste-lint.py --selftest
+
+# Check approved vocabulary
 python3 skills/ste100/scripts/ste-lint.py --dict README.md
-echo "text" | python3 skills/ste100/scripts/ste-lint.py --json
+
+# Output results as JSON
+echo '"text"' | python3 skills/ste100/scripts/ste-lint.py --json
+
+# Set the allowed baseline for hard violations
 python3 skills/ste100/scripts/ste-lint.py --baseline 5 doc.md
+
+# Disable selected advisory checks
 python3 skills/ste100/scripts/ste-lint.py --disable passive-voice,present-perfect doc.md
+
+# Automatically fix supported issues
 python3 skills/ste100/scripts/ste-lint.py --fix doc.md
+
+# Use concise output
 python3 skills/ste100/scripts/ste-lint.py --terse doc.md
 ```
 
