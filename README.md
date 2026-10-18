@@ -1,4 +1,4 @@
-# ASD-STE100-skill
+# ASD-STE100 Simplified Technical English Skill for AI Agents
 
 An Agent Skills package that makes
 your AI agent write and rewrite text in **ASD-STE100 Simplified Technical
