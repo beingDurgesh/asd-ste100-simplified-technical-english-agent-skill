@@ -76,74 +76,17 @@ cp -r skills/ste100 ~/.agent/skills/ste100
 ```
 No install step, no network calls, no dependencies beyond the standard library.
 
+
 ## Before and after
 
-A rewrite keeps the meaning and drops the parts that a reader outside your
-field must guess. Here is the same instruction in Plain mode and in Strict
-mode.
+| Mode | Before | After |
+|---|---|---|
+| **Plain** | To deploy, make sure the build passed. Then run the deploy script. If the script fails, check the logs and fix the issue before you try again. | Build must pass before you deploy. Run `scripts/deploy.sh`. If it fails, read `logs/deploy.log`. Fix the cause. Run the script again. |
+| **Strict** | Utilize the configuration panel to modify the settings. The system will subsequently initiate the update procedure. | Use the configuration panel to change the settings. The system then runs the update. |
+| **Uncertainty** | The update may have caused the outage. | It is possible that the update caused the outage. |
 
-### Plain mode
+> Strict mode applies the approved vocabulary and relevant writing rules. Always verify the final text against the applicable ASD-STE100 standard.
 
-Before:
-
-> To deploy, make sure the build passed. Then run the deploy script. If the
-> script fails, check the logs and fix the issue before you try again.
-
-After:
-
-> Build must pass before you deploy. Run `scripts/deploy.sh`. If the script
-> fails, read `logs/deploy.log`. Fix the cause. Run the script again.
-
-### Strict mode
-
-Strict mode applies the full vocabulary. Words not in the approved
-dictionary are replaced or removed.
-
-Before:
-
-> Utilize the configuration panel to modify the settings. The system will
-> subsequently initiate the update procedure.
-
-After:
-
-> Use the configuration panel to change the settings. The system then runs
-> the update.
-
-### Hedges and uncertainty
-
-A rewrite can keep a hedge without using a banned modal. The standard
-gives the approved adjective for past possibility.
-
-Before:
-
-> The update may have caused the outage.
-
-After:
-
-> It is possible that the update caused the outage.
-
-Strict mode is on when you name STE, ASD-STE100, or compliance. No tool
-guarantees full compliance, because the official dictionary is copyrighted
-and is a free download at asd-ste100.org.
-
-#### How the hedge rewrite works
-
-The sentence keeps its uncertainty and drops the banned modal. The
-adjective POSSIBLE is approved in the standard, and the "It is possible
-that" construction is the standard's own example for it. The past tense
-(caused) stays simple, which satisfies Rule 3.2. No cause is asserted:
-the reader still does not know whether the update was the cause.
-
-A rewrite never turns a hedge into a certainty. If the cause is unknown,
-say so directly:
-
-Before:
-
-> The update may or may not have caused the outage.
-
-After:
-
-> It is not known whether the update caused the outage.
 
 The linter does not check this. Rule 3.2 and the modal ladder ban
 `may`, `might`, and `could`, but the linter deliberately never flags them:
